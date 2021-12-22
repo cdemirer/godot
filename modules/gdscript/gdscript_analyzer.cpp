@@ -629,7 +629,7 @@ void GDScriptAnalyzer::resolve_class_interface(GDScriptParser::ClassNode *p_clas
 					specified_type.is_meta_type = false;
 				}
 
-				if (member.variable->initializer != nullptr) {
+				if (member.variable->infer_datatype && member.variable->initializer != nullptr) {
 					member.variable->set_datatype(datatype); // Allow recursive usage.
 					reduce_expression(member.variable->initializer);
 					if ((member.variable->infer_datatype || (member.variable->datatype_specifier != nullptr && specified_type.has_container_element_type())) && member.variable->initializer->type == GDScriptParser::Node::ARRAY) {
