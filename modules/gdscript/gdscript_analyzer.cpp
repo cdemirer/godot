@@ -3507,6 +3507,9 @@ bool GDScriptAnalyzer::get_function_signature(GDScriptParser::CallNode *p_source
 	r_default_arg_count = 0;
 	StringName function_name = p_function;
 
+	if (p_base_type.kind == GDScriptParser::DataType::ENUM) {
+		return false;
+	}
 	if (p_base_type.kind == GDScriptParser::DataType::BUILTIN) {
 		// Construct a base type to get methods.
 		Callable::CallError err;
