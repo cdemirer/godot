@@ -141,6 +141,10 @@ GDScriptDataType GDScriptCompiler::_gdtype_from_datatype(const GDScriptParser::D
 			}
 		} break;
 		case GDScriptParser::DataType::ENUM:
+			result.has_type = true;
+			result.kind = GDScriptDataType::BUILTIN;
+			result.builtin_type = Variant::DICTIONARY;
+			break;
 		case GDScriptParser::DataType::ENUM_VALUE:
 			result.has_type = true;
 			result.kind = GDScriptDataType::BUILTIN;
