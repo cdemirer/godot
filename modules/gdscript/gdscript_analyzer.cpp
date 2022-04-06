@@ -1945,7 +1945,7 @@ void GDScriptAnalyzer::reduce_assignment(GDScriptParser::AssignmentNode *p_assig
 	}
 	p_assignment->set_datatype(op_type);
 
- 	if (assignee_type.is_hard_type() && !assignee_type.is_variant() && op_type.is_hard_type()) {
+	if (assignee_type.is_hard_type() && !assignee_type.is_variant() && op_type.is_hard_type()) {
 		if (compatible) {
 			compatible = is_type_compatible(assignee_type, op_type, true, p_assignment->assigned_value);
 			if (!compatible) {
@@ -1953,7 +1953,7 @@ void GDScriptAnalyzer::reduce_assignment(GDScriptParser::AssignmentNode *p_assig
 				if (!is_type_compatible(op_type, assignee_type, true)) {
 					push_error(vformat(R"(Cannot assign a value of type "%s" to a target of type "%s".)", assigned_value_type.to_string(), assignee_type.to_string()), p_assignment->assigned_value);
 				} else {
- 					// TODO: Add warning.
+					// TODO: Add warning.
 					mark_node_unsafe(p_assignment);
 					p_assignment->use_conversion_assign = true;
 				}
