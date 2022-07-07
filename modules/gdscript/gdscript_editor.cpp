@@ -1825,6 +1825,10 @@ static bool _guess_identifier_type(GDScriptParser::CompletionContext &p_context,
 			const GDScriptParser::SuiteNode::Local &local = suite->get_local(p_identifier);
 
 			id_type = local.get_datatype();
+			if (id_type.is_hard_type() && !id_type.is_variant()) {
+				r_type.type = id_type;
+				return true;
+			}
 
 			// Check initializer as the first assignment.
 			switch (local.type) {
