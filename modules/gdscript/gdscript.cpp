@@ -2237,7 +2237,11 @@ GDScriptLanguage::GDScriptLanguage() {
 	script_frame_time = 0;
 
 	_debug_call_stack_pos = 0;
+#ifdef DEV_ENABLED
+	int dmcs = GLOBAL_DEF("debug/settings/gdscript/max_call_stack", 256);
+#else
 	int dmcs = GLOBAL_DEF("debug/settings/gdscript/max_call_stack", 1024);
+#endif
 	ProjectSettings::get_singleton()->set_custom_property_info("debug/settings/gdscript/max_call_stack", PropertyInfo(Variant::INT, "debug/settings/gdscript/max_call_stack", PROPERTY_HINT_RANGE, "1024,4096,1,or_greater")); //minimum is 1024
 
 	if (EngineDebugger::is_active()) {
