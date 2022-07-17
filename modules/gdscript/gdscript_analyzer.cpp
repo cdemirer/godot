@@ -926,6 +926,9 @@ void GDScriptAnalyzer::resolve_class_body(GDScriptParser::ClassNode *p_class) {
 						member.variable->setter->parameters[0]->datatype_specifier = member.variable->datatype_specifier;
 						member.variable->setter->parameters[0]->set_datatype(member.get_datatype());
 					}
+					if (member.variable->setter->parameters[0]->identifier && member.variable->identifier && member.variable->setter->parameters[0]->identifier->name == member.variable->identifier->name) {
+						push_error(R"(The setter's parameter name shadows the member.)", member.variable);
+					}
 
 					resolve_function_body(member.variable->setter);
 				}
@@ -1001,6 +1004,9 @@ void GDScriptAnalyzer::resolve_class_body(GDScriptParser::ClassNode *p_class) {
 
 					} else if (setter_function->parameters.size() != 1) {
 						push_error(vformat(R"(Function "%s" cannot be used as setter because of its signature.)", setter_function->identifier->name), member.variable);
+
+					} else if (setter_function->parameters[0]->identifier && member.variable->identifier && setter_function->parameters[0]->identifier->name == member.variable->identifier->name) {
+						push_error(vformat(R"(Function "%s" cannot be used as setter because its parameter name shadows the member.)", setter_function->identifier->name), member.variable);
 
 					} else if (!is_type_compatible(member.variable->datatype, setter_function->parameters[0]->datatype, true)) {
 						push_error(vformat(R"(Function with argument type "%s" cannot be used as setter for a property of type "%s".)", setter_function->parameters[0]->datatype.to_string(), member.variable->datatype.to_string()), member.variable);
