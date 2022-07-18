@@ -40,6 +40,8 @@
 #include "gdscript.h"
 #include "gdscript_utility_functions.h"
 
+#include "scene/resources/packed_scene.h"
+
 static MethodInfo info_from_utility_func(const StringName &p_function) {
 	ERR_FAIL_COND_V(!Variant::has_utility_function(p_function), MethodInfo());
 
@@ -3073,6 +3075,20 @@ void GDScriptAnalyzer::reduce_identifier(GDScriptParser::IdentifierNode *p_ident
 						result = type_from_metatype(parser->get_parser()->head->get_datatype());
 					}
 				}
+			} else {
+				// Get the type of root node
+				StringName root_node_native_type;
+				Ref<Resource> res = ResourceLoader::load(autoload.path);
+				if (res.is_valid()) {
+					Ref<PackedScene> scn = res;
+					if (scn.is_valid()) {
+						result.native_type = scn->get_state()->get_node_type(0);
+					}
+				}
+			}
+			if (result.native_type == StringName()) {
+				ERR_PRINT(vformat(R"(Parser bug: Can't resolve type of singleton "%s".)", name));
+				result.native_type = StringName("Node");
 			}
 			result.is_constant = true;
 			p_identifier->set_datatype(result);
